@@ -1,0 +1,135 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #333c66 0%, #6b51eb 100%);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Mobile-first responsive design */
+.container {
+    width: 100%;
+    max-width: 100%;
+    padding: 0 16px;
+}
+
+/* Touch-friendly buttons */
+.answer-btn {
+    border: 2px solid transparent;
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.answer-btn:active {
+    transform: scale(0.95);
+}
+
+.answer-btn.selected {
+    background-color: #234E94 !important;
+    color: white !important;
+    border-color: #234E94;
+    transform: scale(0.95);
+}
+
+/* Animations for mobile */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+    100% { transform: scale(1); }
+}
+
+.pulse-animation {
+    animation: pulse 0.3s ease-in-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.slide-in {
+    animation: slideIn 0.4s ease-out;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-8px);
+    }
+    60% {
+        transform: translateY(-4px);
+    }
+}
+
+.bounce-animation {
+    animation: bounce 0.5s;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+.shake-animation {
+    animation: shake 0.5s ease-in-out;
+}
+
+/* Mobile optimizations */
+@media (max-width: 640px) {
+    .grid-cols-7 {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+    }
+    
+    .answer-btn {
+        padding: 12px 8px;
+        font-size: 14px;
+        min-height: 50px;
+    }
+}
+
+@media (max-width: 480px) {
+    .grid-cols-7 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .answer-btn {
+        padding: 16px 12px;
+        font-size: 16px;
+        min-height: 60px;
+    }
+}
+
+/* Prevent zoom on input for iOS */
+@media screen and (max-width: 768px) {
+    input, select, textarea {
+        font-size: 16px;
+    }
+}
+
+/* Safe area insets for modern phones */
+@supports(padding: max(0px)) {
+    .container {
+        padding-left: max(16px, env(safe-area-inset-left));
+        padding-right: max(16px, env(safe-area-inset-right));
+    }
+}
