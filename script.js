@@ -162,7 +162,7 @@ class QuizGame {
     {
         "numero": "27",
         "questao": "USO AS PESSOAS PARA CONSEGUIR O QUE DESEJO",
-        "resposta": "1"
+        "resposta": "2"
     },
     {
         "numero": "28",
