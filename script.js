@@ -53,7 +53,7 @@ class QuizGame {
     {
         "numero": "5",
         "questao": "FALO TUDO QUE PENSO",
-        "resposta": "4"
+        "resposta": "2"
     },
     {
         "numero": "6",
@@ -118,12 +118,12 @@ class QuizGame {
     {
         "numero": "18",
         "questao": "POSSO AGREDIR FISICAMENTE AS PESSOAS QUANDO FICO MUITO IRRITADO",
-        "resposta": "2"
+        "resposta": "1"
     },
     {
         "numero": "19",
         "questao": "RESOLVO MEUS PROBLEMAS SEM PENSAR MUITO",
-        "resposta": "4"
+        "resposta": "2"
     },
     {
         "numero": "20",
@@ -148,7 +148,7 @@ class QuizGame {
     {
         "numero": "24",
         "questao": "DIVIRTO-ME CONTRARIANDO AS PESSOAS",
-        "resposta": "2"
+        "resposta": "1"
     },
     {
         "numero": "25",
@@ -163,7 +163,7 @@ class QuizGame {
     {
         "numero": "27",
         "questao": "USO AS PESSOAS PARA CONSEGUIR O QUE DESEJO",
-        "resposta": "2"
+        "resposta": "1"
     },
     {
         "numero": "28",
@@ -343,7 +343,7 @@ class QuizGame {
     {
         "numero": "63",
         "questao": "FAÇO COISAS CONSIDERADAS PERIGOSAS",
-        "resposta": "6"
+        "resposta": "2"
     },
     {
         "numero": "64",
@@ -478,7 +478,7 @@ class QuizGame {
     {
         "numero": "90",
         "questao": "VIVO MINHAS EMOÇÕES INTENSAMENTE",
-        "resposta": "4"
+        "resposta": "2"
     },
     {
         "numero": "91",
@@ -523,7 +523,7 @@ class QuizGame {
     {
         "numero": "99",
         "questao": "SINTO UMA INCOTROLÁVEL VONTADE DE FALAR, MESMO QUE SEJA COM QUEM NÃO CONHEÇO",
-        "resposta": "4"
+        "resposta": "2"
     },
     {
         "numero": "100",
