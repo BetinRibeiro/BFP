@@ -3,7 +3,7 @@ class QuizGame {
         this.questions = [];
         this.currentQuestionIndex = 0;
         this.score = 0;
-        this.targetScore = 200;
+        this.targetScore = 0; // agora não é usado para vitória
         this.gameOver = false;
         
         this.initializeElements();
@@ -26,7 +26,6 @@ class QuizGame {
         this.restartGameBtn = document.getElementById('restartGameBtn');
         this.answerButtons = document.querySelectorAll('.answer-btn');
     }
-
     loadQuestions() {
         // Mock data - in a real scenario, this would come from an API or file
         this.questions = [
@@ -662,7 +661,7 @@ class QuizGame {
     }
 ];
 
-this.displayQuestion();
+        this.displayQuestion();
     }
 
     setupEventListeners() {
@@ -675,28 +674,21 @@ this.displayQuestion();
             });
         });
 
-        this.nextQuestionBtn.addEventListener('click', () => {
-            this.nextQuestion();
-        });
-
-        this.restartGameBtn.addEventListener('click', () => {
-            this.restartGame();
-        });
+        this.nextQuestionBtn.addEventListener('click', () => this.nextQuestion());
+        this.restartGameBtn.addEventListener('click', () => this.restartGame());
     }
 
     selectAnswer(value) {
-        // Remove previous selection
         this.answerButtons.forEach(btn => {
             btn.classList.remove('selected', 'bg-primary', 'text-white');
             btn.classList.add('bg-gray-100', 'text-gray-700');
         });
 
-        // Highlight selected answer
         const selectedButton = document.querySelector(`[data-value="${value}"]`);
-        selectedButton.classList.add('selected', 'bg-primary', 'text-white');
-        selectedButton.classList.remove('bg-gray-100', 'text-gray-700');
+        if (selectedButton) {
+            selectedButton.classList.add('selected', 'bg-primary', 'text-white');
+        }
 
-        // Check answer after a brief delay
         setTimeout(() => {
             this.checkAnswer(value);
         }, 500);
@@ -707,10 +699,19 @@ this.displayQuestion();
         const correctAnswer = currentQuestion.resposta;
 
         if (userAnswer === correctAnswer) {
-            this.score += 1;
+            this.score++;
             this.showResult(true, correctAnswer);
+
+            // ✅ Remove a questão da lista quando acertar
+            this.questions.splice(this.currentQuestionIndex, 1);
+
         } else {
-            this.score -= 1;
+            this.score--;
+
+            // ❌ Duplicar a questão e mover para o final da lista
+            const questionCopy = { ...currentQuestion };
+            this.questions.push(questionCopy);
+
             this.showResult(false, correctAnswer);
         }
 
@@ -724,64 +725,69 @@ this.displayQuestion();
         if (isCorrect) {
             this.correctResultElement.classList.remove('hidden');
             this.incorrectResultElement.classList.add('hidden');
-            this.resultDisplayElement.classList.add('slide-in');
         } else {
             this.incorrectResultElement.classList.remove('hidden');
             this.correctResultElement.classList.add('hidden');
             this.correctAnswerElement.textContent = correctAnswer;
         }
 
-        // Check if game over
-        if (this.score >= this.targetScore) {
-            setTimeout(() => this.endGame(true), 1000);
-        } else if (this.score < 0) {
-            setTimeout(() => this.endGame(false), 1000);
-        }
+        // Verifica se o jogo acabou (sem mais perguntas)
+        setTimeout(() => {
+            if (this.questions.length === 0) {
+                this.endGame(true);
+            }
+        }, 1000);
     }
+
     nextQuestion() {
-        this.currentQuestionIndex++;
-        
+        // Se não há mais perguntas, encerra
+        if (this.questions.length === 0) {
+            this.endGame(true);
+            return;
+        }
+
+        // Se removeu uma questão, o índice pode sair do limite
         if (this.currentQuestionIndex >= this.questions.length) {
-            // Loop back to beginning when we reach the last question
             this.currentQuestionIndex = 0;
         }
 
         this.displayQuestion();
         this.resultDisplayElement.classList.add('hidden');
         this.questionCardElement.classList.remove('hidden');
-        this.resultDisplayElement.classList.remove('slide-in');
     }
-displayQuestion() {
+
+    displayQuestion() {
         const currentQuestion = this.questions[this.currentQuestionIndex];
-        
+        if (!currentQuestion) {
+            this.endGame(true);
+            return;
+        }
+
         this.questionNumberElement.textContent = currentQuestion.numero;
         this.questionTextElement.textContent = currentQuestion.questao;
-        
-        // Reset button styles
+
         this.answerButtons.forEach(btn => {
             btn.classList.remove('selected', 'bg-primary', 'text-white');
             btn.classList.add('bg-gray-100', 'text-gray-700');
         });
 
-        // Add animation
         this.questionCardElement.classList.add('slide-in');
-        setTimeout(() => {
-            this.questionCardElement.classList.remove('slide-in');
-        }, 500);
+        setTimeout(() => this.questionCardElement.classList.remove('slide-in'), 400);
     }
 
     updateScoreDisplay() {
         this.currentScoreElement.textContent = this.score;
         this.currentScoreElement.classList.add('bounce-animation');
-        
-        // Update progress bar
-        const progressPercentage = Math.min((this.score / this.targetScore) * 100, 100);
-        this.progressBarElement.style.width = `${progressPercentage}%`;
+
+        const totalInicial = 126; // total original, se quiser
+        const progresso = ((totalInicial - this.questions.length) / totalInicial) * 100;
+        this.progressBarElement.style.width = `${Math.min(progresso, 100)}%`;
 
         setTimeout(() => {
             this.currentScoreElement.classList.remove('bounce-animation');
         }, 600);
     }
+
     endGame(isVictory) {
         this.gameOver = true;
         
@@ -789,29 +795,30 @@ displayQuestion() {
         const message = document.getElementById('gameOverMessage');
         
         if (isVictory) {
-            title.textContent = 'Parabéns! 🎊';
-            message.textContent = `Você alcançou ${this.score} pontos e completou o desafio!`;
+            title.textContent = '🔥 Treino concluído com sucesso!';
+            message.textContent = `Você acertou todas as questões! Parabéns pelo desempenho.`;
         } else {
-            title.textContent = 'Game Over 😔';
-            message.textContent = `Sua pontuação final foi ${this.score}. Tente novamente!`;
+            title.textContent = 'Fim de Jogo 😔';
+            message.textContent = `Pontuação final: ${this.score}. Continue praticando!`;
         }
         
         this.gameOverModal.classList.remove('hidden');
     }
-restartGame() {
+
+    restartGame() {
         this.currentQuestionIndex = 0;
         this.score = 0;
         this.gameOver = false;
-        
+
+        this.loadQuestions();
         this.updateScoreDisplay();
-        this.displayQuestion();
         this.gameOverModal.classList.add('hidden');
         this.questionCardElement.classList.remove('hidden');
         this.resultDisplayElement.classList.add('hidden');
     }
 }
 
-// Initialize the game when the page loads
+// Inicialização
 document.addEventListener('DOMContentLoaded', () => {
     new QuizGame();
 });
